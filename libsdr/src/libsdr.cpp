@@ -21,6 +21,9 @@ int main() {
 	sdr::Sdr ist("/tmp/stardict-langdao-ec-gb-2.4.2", "langdao-ec-gb");
 //	cout << ist.createEdx(4) << endl;
 	cout << ist.loadDict() << endl;
-	cout << ist.find("account");
+	sdr::SdrRes res = ist.find("B k");
+	cout << res.matched << endl;
+	cout << res.content << endl;
+	cout << res.msg << endl;
 	return 0;
 }

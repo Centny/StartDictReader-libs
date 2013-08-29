@@ -21,6 +21,17 @@ void int2byte2(int val, unsigned char* buf);
 int byte2int(char* buf);
 int byte2int2(unsigned char* buf);
 //
+struct SdrRes {
+	long edxBeg;
+	long edxLen;
+	long idxBeg;
+	long idxEnd;
+	string matched;
+	string word;
+	string content;
+	string msg;
+};
+//
 class Sdr {
 private:
 	string rpath;
@@ -33,6 +44,8 @@ private:
 	int entryCount;
 	char buf[BSIZE];
 	map<string, string> infoes;
+private:
+
 public:
 	Sdr(string rpath, string name);
 	virtual ~Sdr();
@@ -50,8 +63,8 @@ public:
 	//
 	string loadDict();
 	void unloadDict();
-	string find(string word);
-	string find(int beg_idx, int end_idx, string word);
+	SdrRes find(string word);
+	SdrRes find(int beg_idx, int end_idx, string word);
 	string dictm(long beg, long size);
 	//
 	string createEdx(int ecount);

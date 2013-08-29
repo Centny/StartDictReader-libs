@@ -170,7 +170,8 @@ void Sdr::unloadDict() {
 	}
 }
 //
-string Sdr::find(string word) {
+SdrRes Sdr::find(string word) {
+	SdrRes nfound = { 0, 0, 0, 0, "", word, "", "not found" };
 	const char* tword = word.c_str();
 	int wsize = word.length();
 	int beg = 0, end = this->edxSize;
@@ -191,19 +192,66 @@ string Sdr::find(string word) {
 	if (ccmp_c(bufb, tword, cmp) == 0) {
 		return this->find(byte2int(bufb + this->edxCount), -1, word);
 	}
-	int center, cres;
-
-	while (beg < end) {
+	int center, cres, oft;
+	while (end - beg > 1) {
 		center = (end + beg) / 2;
-		int oft = center * this->entryCount + EDX_HSIZE;
+		oft = center * this->entryCount + EDX_HSIZE;
 		this->edx->seekg(oft);
 		this->edx->read(bufa, this->entryCount);
-//		cout << oft << ":" << bufa << endl;
 		cres = ccmp_c(bufa, tword, cmp);
 		if (cres == 0) {
-			this->edx->read(bufb, this->entryCount);
-			return this->find(byte2int(bufa + this->edxCount),
-					byte2int(bufb + this->edxCount), word);
+			if (cmp == this->edxCount) {
+				this->edx->read(bufb, this->entryCount);
+				SdrRes res = this->find(byte2int(bufa + this->edxCount),
+						byte2int(bufb + this->edxCount), word);
+				res.edxBeg = center;
+				res.edxLen = 1;
+				return res;
+			} else {
+				int tbeg, tend, tcenter;
+				//find the real begin.
+				tbeg = beg;
+				tend = center;
+				while (tend - tbeg > 1) {
+					tcenter = (tend + tbeg) / 2;
+					oft = tcenter * this->entryCount + EDX_HSIZE;
+					this->edx->seekg(oft);
+					this->edx->read(bufa, this->entryCount);
+					if (ccmp_c(bufa, tword, cmp) == 0) {
+						tend = tcenter;
+					} else {
+						tbeg = tcenter;
+					}
+				}
+				int rbeg = tend;
+				//find the real end.
+				tbeg = center;
+				tend = end;
+				while (tend - tbeg > 1) {
+					tcenter = (tend + tbeg) / 2;
+					oft = tcenter * this->entryCount + EDX_HSIZE;
+					this->edx->seekg(oft);
+					this->edx->read(bufa, this->entryCount);
+					if (ccmp_c(bufa, tword, cmp) == 0) {
+						tend = tcenter;
+					} else {
+						tbeg = tcenter;
+					}
+				}
+				int rend = tend;
+				//
+				oft = rbeg * this->entryCount + EDX_HSIZE;
+				this->edx->seekg(oft);
+				this->edx->read(bufa, this->entryCount);
+				oft = rend * this->entryCount + EDX_HSIZE;
+				this->edx->seekg(oft);
+				this->edx->read(bufb, this->entryCount);
+				SdrRes res = this->find(byte2int(bufa + this->edxCount),
+						byte2int(bufb + this->edxCount), word);
+				res.edxBeg = rbeg;
+				res.edxLen = rend - rbeg;
+				return res;
+			}
 		} else if (cres < 0) {
 			beg = center;
 //			cout << center << ",beg:" << string(bufa, this->edxCount) << endl;
@@ -212,9 +260,10 @@ string Sdr::find(string word) {
 //			cout << center << ",end:" << string(bufa, this->edxCount) << endl;
 		}
 	}
-	return "";
+	return nfound;
 }
-string Sdr::find(int beg_idx, int end_idx, string word) {
+SdrRes Sdr::find(int beg_idx, int end_idx, string word) {
+	SdrRes nfound = { 0, 0, 0, 0, "", word, "", "not found" };
 	long idxsize = this->idxfilesize();
 	if (end_idx < 0) {
 		end_idx = idxsize;
@@ -223,7 +272,7 @@ string Sdr::find(int beg_idx, int end_idx, string word) {
 		cout << beg_idx << endl;
 		cout << end_idx << endl;
 		cout << idxsize << endl;
-		return "";
+		return nfound;
 	}
 	this->idx->seekg(beg_idx);
 	string sbuf;
@@ -239,14 +288,16 @@ string Sdr::find(int beg_idx, int end_idx, string word) {
 			if (mtype == "m") {
 				int dofft = byte2int(cbuf);
 				int dsize = byte2int(cbuf + 4);
-				return this->dictm(dofft, dsize);
+				string dstr = this->dictm(dofft, dsize);
+				SdrRes res = { 0, 0, beg_idx, end_idx, sbuf, word, dstr, "" };
+				return res;
 			} else {
 				cout << "not implement:" << mtype << endl;
 			}
 			break;
 		}
 	}
-	return "";
+	return nfound;
 }
 string Sdr::dictm(long beg, long size) {
 	char cbuf[size];
