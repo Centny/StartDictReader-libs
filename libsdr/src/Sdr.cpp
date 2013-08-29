@@ -142,7 +142,7 @@ string Sdr::find(string word) {
 	const char* tword = word.c_str();
 	int wsize = word.length();
 	int beg = 0, end = this->edxSize;
-	char bufa[1024], bufb[1024];
+	char bufa[this->entryCount], bufb[this->entryCount];
 	int cmp = wsize > this->edxCount ? this->edxCount : word.size();
 	//check begin
 	this->edx->seekg(EDX_HSIZE);
