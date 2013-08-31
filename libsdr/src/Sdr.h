@@ -11,15 +11,19 @@
 #include<fstream>
 #include<iostream>
 #include<map>
+#include<sstream>
 namespace sdr {
 using namespace std;
-#define BSIZE 1024
 #define EDX_HSIZE 12
+#define CDX_HSIZE 12
 
 void int2byte(int val, char* buf);
 void int2byte2(int val, unsigned char* buf);
+void long2byte(long val, char* buf);
 int byte2int(char* buf);
 int byte2int2(unsigned char* buf);
+long byte2long(char* buf, int count = 8);
+string fsub(string& s, char t);
 //
 struct SdrRes {
 	long edxBeg;
@@ -38,19 +42,27 @@ private:
 	string name;
 	fstream *idx;
 	fstream *dict;
-	fstream *edx;
-	int edxCount;
-	int edxSize;
-	int entryCount;
-	char buf[BSIZE];
+	//
+	istream *edx;
+	fstream *edx_f;
+	stringstream *edx_s;
+	//
+	int edxCharSize; //the edx char count.
+	int edxOffsetSize; //the edx offset size.
+	int edxEntryCount; //the edx entry count.
+	int edxEntrySize; //the edx entry size.
 	map<string, string> infoes;
+	bool medx; //load the edx file to memory.
+	//
+
 private:
 
 public:
-	Sdr(string rpath, string name);
+	Sdr(string rpath, string name, bool medx = false);
 	virtual ~Sdr();
 	string idxpath();
 	string edxpath();
+	string cdxpath();
 	string dictpath();
 	string infopath();
 	//
@@ -60,14 +72,18 @@ public:
 	long idxfilesize();
 	string bookname();
 	string sametypesequence();
+	bool lessVersion(string tver);
 	//
+	string loadDictInfo();
 	string loadDict();
 	void unloadDict();
 	SdrRes find(string word);
-	SdrRes find(int beg_idx, int end_idx, string word);
+	SdrRes find(long beg_idx, long end_idx, string word);
 	string dictm(long beg, long size);
 	//
-	string createEdx(int ecount);
+//	string loadCdx();
+	string createEdx(int ecount, bool oft64 = false);
+//	string createCdx(int ccount, bool oft64 = false);
 };
 
 } /* namespace sdr */
