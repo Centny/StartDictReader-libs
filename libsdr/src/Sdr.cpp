@@ -79,7 +79,7 @@ int ccmp_c(const char* a, const char* b, int count) {
 string fsub(string& s, char t) {
 	size_t idx = s.find(t);
 	string sub;
-	if (idx < 0) {
+	if (idx == string::npos) {
 		sub = s;
 		s = "";
 	} else {
@@ -112,9 +112,9 @@ string Sdr::idxpath() {
 string Sdr::edxpath() {
 	return this->rpath + "/" + this->name + ".edx";
 }
-string Sdr::cdxpath() {
-	return this->rpath + "/" + this->name + ".cdx";
-}
+//string Sdr::cdxpath() {
+//	return this->rpath + "/" + this->name + ".cdx";
+//}
 string Sdr::dictpath() {
 	return this->rpath + "/" + this->name + ".dict";
 }
@@ -170,7 +170,7 @@ string Sdr::loadDictInfo() {
 		sbuf.clear();
 		getline(info, sbuf);
 		size_t p = sbuf.find("=");
-		if (p < 0) {
+		if (p == string::npos) {
 			continue;
 		}
 		this->infoes[sbuf.substr(0, p)] = sbuf.substr(p + 1);

@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C3D8D14D17CD89FA00FF93D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D8D14C17CD89FA00FF93D7 /* Foundation.framework */; };
-		C3D8D19117CD8B1600FF93D7 /* StartDictReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D8D19017CD8B1600FF93D7 /* StartDictReader.m */; };
+		C3EEC7B817D234E9003C495D /* Sdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3EEC7B617D234E9003C495D /* Sdr.cpp */; };
+		C3EEC7BB17D2350D003C495D /* SDictReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = C3EEC7BA17D2350D003C495D /* SDictReader.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,8 +28,10 @@
 		C3D8D14917CD89FA00FF93D7 /* libStartDictReader-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libStartDictReader-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3D8D14C17CD89FA00FF93D7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C3D8D15017CD89FA00FF93D7 /* StartDictReader-ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StartDictReader-ios-Prefix.pch"; sourceTree = "<group>"; };
-		C3D8D18F17CD8B1600FF93D7 /* StartDictReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartDictReader.h; sourceTree = "<group>"; };
-		C3D8D19017CD8B1600FF93D7 /* StartDictReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartDictReader.m; sourceTree = "<group>"; };
+		C3EEC7B617D234E9003C495D /* Sdr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sdr.cpp; path = ../../../libsdr/src/Sdr.cpp; sourceTree = "<group>"; };
+		C3EEC7B717D234E9003C495D /* Sdr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sdr.h; path = ../../../libsdr/src/Sdr.h; sourceTree = "<group>"; };
+		C3EEC7B917D2350D003C495D /* SDictReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDictReader.h; sourceTree = "<group>"; };
+		C3EEC7BA17D2350D003C495D /* SDictReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDictReader.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,9 +74,11 @@
 		C3D8D14E17CD89FA00FF93D7 /* StartDictReader-ios */ = {
 			isa = PBXGroup;
 			children = (
+				C3EEC7B617D234E9003C495D /* Sdr.cpp */,
+				C3EEC7B717D234E9003C495D /* Sdr.h */,
 				C3D8D14F17CD89FA00FF93D7 /* Supporting Files */,
-				C3D8D18F17CD8B1600FF93D7 /* StartDictReader.h */,
-				C3D8D19017CD8B1600FF93D7 /* StartDictReader.m */,
+				C3EEC7B917D2350D003C495D /* SDictReader.h */,
+				C3EEC7BA17D2350D003C495D /* SDictReader.mm */,
 			);
 			path = "StartDictReader-ios";
 			sourceTree = "<group>";
@@ -137,7 +142,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3D8D19117CD8B1600FF93D7 /* StartDictReader.m in Sources */,
+				C3EEC7B817D234E9003C495D /* Sdr.cpp in Sources */,
+				C3EEC7BB17D2350D003C495D /* SDictReader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
